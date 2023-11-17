@@ -38,7 +38,7 @@ def start_message(message):
     test = types.KeyboardButton("Пройти тест")
     markup.add(test)
 
-    bot.send_message(-1002079028053, f"{message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
+    bot.send_message(-1002079028053, f"#1 {message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
 
     bot.send_message(message.chat.id, f"""Привет!\n
 Мы подготовили руководство и дневник финансовой грамотности для вас и вашего ребёнка.\n
@@ -133,7 +133,7 @@ def start_message(message):
 
                 bot.send_message(message.chat.id, "А теперь группа", reply_markup=markup)
 
-                bot.send_message(-1002079028053, f"{message.from_user.username} {message.text}")
+                bot.send_message(-1002079028053, f"#2 {message.from_user.username} {message.text} {m[message.from_user.username].summa}")
                 print(f"{message.from_user.username} {message.text}")
                 m[message.from_user.username].step += 1
             else:
