@@ -7,7 +7,7 @@ User=root
 Group=root
 Type=simple
 Restart=always
-ExecStart=/usr/bin/python3 bot.py
+ExecStart=/usr/bin/python3 /rbc/bot.py
 
 [Install]
 WantedBy=multi-user.target
