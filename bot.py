@@ -33,10 +33,12 @@ bot=telebot.TeleBot(token)
 def start_message(message):
     global m
     m[message.from_user.username] = User(id=message.chat.id, step=0, name=message.from_user.username, first=message.from_user.first_name, last=message.from_user.last_name, phone=None, summa=0)
-    #bot.send_message(-1002079028053, "Сливаю информацию о пользователе в канал")
+    bot.send_message(-1002079028053, "Сливаю информацию о пользователе в канал")
     markup = types.ReplyKeyboardMarkup()
     test = types.KeyboardButton("Пройти тест")
     markup.add(test)
+
+    bot.send_message(-1002079028053, f"{message.from_user.username}")
 
     bot.send_message(message.chat.id, f"""Привет!\n
 Мы подготовили руководство и дневник финансовой грамотности для вас и вашего ребёнка.\n
