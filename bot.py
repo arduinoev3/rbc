@@ -38,7 +38,7 @@ def start_message(message):
     test = types.KeyboardButton("Пройти тест")
     markup.add(test)
 
-    bot.send_message(-1002079028053, f"{message.from_user}")
+    bot.send_message(-1002079028053, f"{message.chat.id} {message.from_user}")
 
     bot.send_message(message.chat.id, f"""Привет!\n
 Мы подготовили руководство и дневник финансовой грамотности для вас и вашего ребёнка.\n
