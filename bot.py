@@ -16,8 +16,8 @@ class User:
     name: str
     first: str
     last: str
-    phone: str
     summa: int
+    email: str
 
 m = dict()
 
