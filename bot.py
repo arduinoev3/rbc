@@ -4,15 +4,9 @@ from collections import deque
 from dataclasses import dataclass
 import os
 from io import BytesIO
+from sys import argv
+from param import token, check_name
 
-if os.environ.get('API_KEY'):
-    token = os.environ.get('API_KEY')
-else:
-    token="6721882243:AAEXkBfvDYqWY36QZi0iKLjCPFe8yF_-IEs"
-if os.environ.get('CHECK_NAME'):
-    check_name = os.environ.get('CHECK_NAME')
-else:
-    check_name = "rbc_talks_chat"
 admins = ["arduinoev3", "derskov"]
 
 @dataclass
