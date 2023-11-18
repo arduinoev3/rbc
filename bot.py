@@ -51,7 +51,6 @@ def start_message(message):
     if message.from_user.username in list(df.name):
         df.loc[df[df.id == message.chat.id].index[0], "step"] = 0
         df.loc[df[df.id == message.chat.id].index[0], "summa"] = 0
-        print(df[df.id == message.chat.id])
     else:
         prem = True if message.from_user.is_premium == "True" else False
         df[len(df)] = [message.chat.id, 0, message.from_user.username, message.from_user.first_name, message.from_user.last_name, prem, 0, None]
