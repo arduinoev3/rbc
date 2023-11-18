@@ -32,6 +32,10 @@ def logs(s):
 @bot.message_handler(commands=['start'])
 def start_message(message):
     global df
+    backup()
+    logs(f"#1 {message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
+
+
     if message.from_user.username in list(df.name):
         df.loc[df[df.id == message.chat.id].index[0], "step"] = 0
         df.loc[df[df.id == message.chat.id].index[0], "summa"] = 0
@@ -49,9 +53,6 @@ def start_message(message):
 Мы — команда Лектория <a href="https://publictalk.rbc.ru/?utm_source=tg_bot&utm_medium=welcome">«Дети в деле» РБК</a>, семейного лектория про осознанные стратегии финансового воспитания, финансовые навыки и предпринимательское мышление.\n
 Чтобы получить руководство и дневник, пройдите короткий тест и узнайте ваш уровень финансовой грамотности""", 
                      disable_web_page_preview=True, reply_to_message_id=None, reply_markup=markup, parse_mode="HTML", disable_notification=None)
-
-    backup()
-    logs(f"#1 {message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
 
 def write_question(message, q, ans):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
