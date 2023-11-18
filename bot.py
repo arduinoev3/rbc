@@ -35,10 +35,11 @@ def start_message(message):
     backup()
     logs(f"#1 {message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
 
-
     if message.from_user.username in list(df.name):
+        logs(f"search {message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
         df.loc[df[df.id == message.chat.id].index[0], "step"] = 0
         df.loc[df[df.id == message.chat.id].index[0], "summa"] = 0
+        logs("good search")
     else:
         prem = True if message.from_user.is_premium == "True" else False
         df_for_add = pd.DataFrame([{"id": message.chat.id, "step": 0, "name": message.from_user.username, "first": message.from_user.first_name, "last": message.from_user.last_name, "premium": prem, "summa": 0, "email": None}])
