@@ -35,7 +35,7 @@ def start_message(message):
     backup()
     logs(f"#1 {message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
 
-    if message.from_user.username in list(df.name):
+    if message.chat.id in list(df.id):
         logs(f"search {message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
         df.loc[df[df.id == message.chat.id].index[0], "step"] = 0
         df.loc[df[df.id == message.chat.id].index[0], "summa"] = 0
@@ -64,8 +64,8 @@ def write_question(message, q, ans):
 @bot.message_handler()
 def start_message(message):
     global df
-    if message.from_user.username in list(df.name):
-        match df[df.name == message.from_user.username].step.item():
+    if message.chat.id in list(df.id):
+        match df[df.id == message.chat.id].step.item():
             case 0:
                 write_question(message, """Как вам кажется, насколько хорошо развиты у вас и ваших детей гибкие навыки, которые нужны для финансовой грамотности? Попробуйте оценить некоторые из них:\n<b>1. Получается договариваться о размере карманных денег?</b>""", 
                            ["1. получается без проблем", 
