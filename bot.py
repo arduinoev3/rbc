@@ -128,7 +128,7 @@ def start_message(message):
                     inning = types.KeyboardButton("Вступил")
                     markup.add(inning)
                     bot.send_message(message.chat.id, "А теперь группа", reply_markup=markup)
-
+                    
                     df.loc[df[df.id == message.chat.id].index[0], "email"] = message.text
                     backup()
                     s = df.loc[df[df.id == message.chat.id].index[0], "summa"]
