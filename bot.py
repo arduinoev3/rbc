@@ -51,7 +51,7 @@ def start_message(message):
 Мы подготовили руководство и дневник финансовой грамотности для вас и вашего ребёнка.\n
 Мы — команда Лектория <a href="https://publictalk.rbc.ru/?utm_source=tg_bot&utm_medium=welcome">«Дети в деле» РБК</a>, семейного лектория про осознанные стратегии финансового воспитания, финансовые навыки и предпринимательское мышление.\n
 Чтобы получить руководство и дневник, пройдите короткий тест и узнайте ваш уровень финансовой грамотности""", 
-                     disable_web_page_preview=True, reply_to_message_id=None, reply_markup=markup, parse_mode="HTML", disable_notification=None)
+                     disable_web_page_preview=True, reply_markup=markup, parse_mode="HTML")
 
 def write_question(message, q, ans):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -113,9 +113,6 @@ def start_message(message):
             case 5:
                 if message.text[0] in ["1", "2", "3"]:
                     df.loc[df[df.id == message.chat.id].index[0], "summa"] += 4 - int(message.text[0])
-                    markup = types.InlineKeyboardMarkup()
-                    url = types.InlineKeyboardButton("Группа", url='https://t.me/{check_name}')
-                    markup.add(url)
             
                     bot.send_message(message.chat.id, """Готово!
 Чтобы получить результаты и дневник финансовой грамотности:
@@ -132,6 +129,7 @@ def start_message(message):
                     markup.add(inning)
                     bot.send_message(message.chat.id, "А теперь группа", reply_markup=markup)
 
+                    df.loc[df[df.id == message.chat.id].index[0], "email"] = message.text
                     backup()
                     s = df.loc[df[df.id == message.chat.id].index[0], "summa"]
                     logs(f"#2 {message.from_user.username} {message.text} {s}")
