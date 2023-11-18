@@ -14,24 +14,8 @@ try:
     df = pd.read_csv("data.csv", index_col=False)
     df.to_csv("data.csv", index=False)
 except:
-    df = pd.DataFrame([{"id": 823859678, 
-                    "step": 0, 
-                    "name": "arduinoev3", 
-                    "first": "🎩Игорь", 
-                    "last": "ФБВоТ Повезло", 
-                    "premium": True, 
-                    "summa": 0, 
-                    "email": "v2072211@yandex.ru", 
-                    },
-                    {"id": 5677083753, 
-                    "step": 0, 
-                    "name": "bssmipt_faq", 
-                    "first": "Студсовет ФБВТ", 
-                    "last": "Общий аккаунт", 
-                    "premium": False, 
-                    "summa": 0, 
-                    "email": "@", 
-                    }])
+    df = pd.DataFrame([{"id": [823859678], "step": [0], "name": ["arduinoev3"], "first": ["🎩Игорь"], "last": ["ФБВоТ Повезло"], "premium": [True], "summa": [0], "email": ["v2072211@yandex.ru"]},
+                    {"id": 5677083753, "step": 0, "name": "bssmipt_faq", "first": "Студсовет ФБВТ", "last": "Общий аккаунт", "premium": False, "summa": 0, "email": "@", }])
 
 bot=telebot.TeleBot(token)
 
@@ -53,7 +37,8 @@ def start_message(message):
         df.loc[df[df.id == message.chat.id].index[0], "summa"] = 0
     else:
         prem = True if message.from_user.is_premium == "True" else False
-        df[len(df)] = [message.chat.id, 0, message.from_user.username, message.from_user.first_name, message.from_user.last_name, prem, 0, None]
+        df_for_add = pd.DataFrame([{"id": message.chat.id, "step": 0, "name": message.from_user.username, "first": message.from_user.first_name, "last": message.from_user.last_name, "premium": prem, "summa": 0, "email": None}])
+        df = df._append(df_for_add, ignore_index = True)
         
     markup = types.ReplyKeyboardMarkup()
     test = types.KeyboardButton("Пройти тест")
