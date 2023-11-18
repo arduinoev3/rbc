@@ -150,7 +150,6 @@ def start_message(message):
                     backup()
                     logs(f"#2 {message.from_user.username} {message.text} {df.loc[df[df.id == message.chat.id].index[0], "summa"]}")
 
-                    print(f"{message.from_user.username} {message.text}")
                     df.loc[df[df.id == message.chat.id].index[0], "step"] += 1
                 else:
                     bot.send_message(message.chat.id, "Какая-то ошибка, напиши почту еще раз")
