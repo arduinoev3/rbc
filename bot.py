@@ -14,10 +14,26 @@ try:
     df = pd.read_csv("data.csv", index_col=False)
     df.to_csv("data.csv", index=False)
 except:
-    df = pd.DataFrame([{"id": [823859678], "step": [0], "name": ["arduinoev3"], "first": ["🎩Игорь"], "last": ["ФБВоТ Повезло"], "premium": [True], "summa": [0], "email": ["v2072211@yandex.ru"]},
-                    {"id": 5677083753, "step": 0, "name": "bssmipt_faq", "first": "Студсовет ФБВТ", "last": "Общий аккаунт", "premium": False, "summa": 0, "email": "@", }])
+    df = pd.DataFrame([{"id": 823859678, "step": 0, "name": "arduinoev3", "first": "🎩Игорь", "last": "ФБВоТ Повезло", "premium": True, "summa": 0, "email": "v2072211@yandex.ru"},
+                       {"id": 5677083753, "step": 0, "name": "bssmipt_faq", "first": "Студсовет ФБВТ", "last": "Общий аккаунт", "premium": False, "summa": 0, "email": "@", }])
 
-bot=telebot.TeleBot(token)
+bot = telebot.TeleBot(token)
+
+def use_correction():
+    global df
+
+    with open("correction.txt", "r") as f:
+        while f:
+            line = f.readline().split()
+            if not line:
+                break
+            id, name, email, summa = line
+            if id != "#2":
+                df.loc[df[df.id == int(id)].index[0], "email"] = email
+                df.loc[df[df.id == int(id)].index[0], "summa"] = int(summa)
+            else:
+                df.loc[df[df.name == name].index[0], "email"] = email
+                df.loc[df[df.name == name].index[0], "summa"] = int(summa)
 
 def backup():
     global backup_id
@@ -31,7 +47,13 @@ def logs(s):
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
+    use_correction()
+
     global df
+
+    df.loc[df[df.id == 5250367490].index[0], "email"] = "anya-che@bk.ru"
+    df.loc[df[df.id == 5250367490].index[0], "summa"] = 14
+
     backup()
     logs(f"#1 {message.from_user.username} {message.from_user.id} {message.from_user.first_name} {message.from_user.last_name} {message.from_user.is_premium}")
 
