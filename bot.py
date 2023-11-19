@@ -19,22 +19,6 @@ except:
 
 bot = telebot.TeleBot(token)
 
-def use_correction():
-    global df
-
-    with open("correction.txt", "r") as f:
-        while f:
-            line = f.readline().split()
-            if not line:
-                break
-            id, name, email, summa = line
-            if id != "#2":
-                df.loc[df[df.id == int(id)].index[0], "email"] = email
-                df.loc[df[df.id == int(id)].index[0], "summa"] = int(summa)
-            else:
-                df.loc[df[df.name == name].index[0], "email"] = email
-                df.loc[df[df.name == name].index[0], "summa"] = int(summa)
-
 def backup():
     global backup_id
     df.to_csv("data.csv", index=False)
@@ -47,8 +31,6 @@ def logs(s):
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    use_correction()
-
     global df
 
     df.loc[df[df.id == 5250367490].index[0], "email"] = "anya-che@bk.ru"
