@@ -114,7 +114,7 @@ def start_message(message):
 💰 Промокод: TG10""", parse_mode="HTML", disable_web_page_preview=True)
                 count += 1
                 logs(f"send {df.id[i]} {count}")
-                time.sleep(0.3)
+                time.sleep(0.2)
             except:
                 pass
     
