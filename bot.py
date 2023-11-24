@@ -7,6 +7,8 @@ from io import BytesIO
 from sys import argv
 from param import token, check_name
 import pandas as pd
+import time
+
 
 backup_id = 5677083753
 
@@ -56,6 +58,8 @@ def start_message(message):
 Мы — команда Лектория <a href="https://publictalk.rbc.ru/?utm_source=tg_bot&utm_medium=welcome">«Дети в деле» РБК</a>, семейного лектория про осознанные стратегии финансового воспитания, финансовые навыки и предпринимательское мышление.\n
 Чтобы получить руководство и дневник, пройдите короткий тест и узнайте ваш уровень финансовой грамотности""", 
                      disable_web_page_preview=True, reply_markup=markup, parse_mode="HTML")
+    time.sleep(0.3)
+    
 
 def write_question(message, q, ans):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
