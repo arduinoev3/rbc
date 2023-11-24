@@ -61,7 +61,7 @@ def start_message(message):
     global df, N
     count = 0
     if message.text == "/jVGa4xX3":
-        for i in range(814, len(df)):
+        for i in range(1019 + 1, len(df)):
             if df.name[i] in {"katkolodeznikova", "tanya_markevich"}:
                 continue
             try:
