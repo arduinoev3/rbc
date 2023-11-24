@@ -197,7 +197,7 @@ def start_message(message):
 
                     s = df.loc[df[df.id == message.chat.id].index[0], "summa"]
 
-                    bot.send_message(message.chat.id, f"Ваш результат {s} баллов")
+                    bot.send_message(message.chat.id, f"Ваш результат {s} баллов", reply_markup=types.ReplyKeyboardRemove())
                     if df.loc[df[df.id == message.chat.id].index[0], "summa"] >= 15:
                         bot.send_message(message.chat.id, f"""Здорово! У вас неплохо получается договариваться и вы легко сможете внедрить полезные привычки и инструменты, о которых эксперты по бизнесу и финансовой грамотности расскажут 25 ноября в лекции <a href="https://publictalk.rbc.ru/?utm_source=tg_bot&utm_medium=result">«Дети в деле» от РБК</a>.\n
     Регистрируйтесь и ждём в гости родителей и их будущих предпринимателей!""", parse_mode="HTML")
