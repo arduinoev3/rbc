@@ -1,0 +1,139 @@
+//@version=6
+strategy("Strategy", shorttitle="Strategy", overlay=true)
+
+// --- Параметры ---
+int length_take = 20  // Кол-во свечей MA
+int length_loss = 5  // Кол-во свечей SL
+float delta = 0  // Отступ при сделках для TP и SL
+float rr = 3.5  // Риск/прибыль
+
+
+// --- Расчёты ---
+ma = ta.sma(hlc3, length_take)  // Формула MA
+cci = (hlc3 - ma) / (0.015 * ta.dev(hlc3, length_take))  // Формула CCI
+plot(ma, color=color.yellow, title="SMA", offset=0) // Ризуем линию MA
+
+// --- Условия ---
+low_loss = ta.lowest(low, length_loss)
+high_loss = ta.highest(high, length_loss)
+condition_cci = (math.abs(cci[3]) > 100) and (math.abs(cci[2]) > 100) and (math.abs(cci[1]) > 100) and (math.abs(cci[0]) < 95)  // Проверка на CCI
+condition_late = (cci[1] < -100 and close < ma) or (cci[1] > 100 and close > ma)  // Проверка на запоздалось
+
+condition_stupid_long = close < ma and condition_cci
+condition_stupid_short = close > ma and condition_cci
+
+condition_long = close < ma and condition_cci and condition_late
+condition_short = close > ma and condition_cci and condition_late
+
+calculated_RR = math.abs(ma - close) / math.abs(close - (condition_long ? low_loss : high_loss))
+condition_RR = calculated_RR > rr  // Проверка на RR
+
+
+condition_long := condition_long and condition_RR
+condition_short := condition_short and condition_RR
+
+
+// --- Оповещение для ручной торговли ---
+rr_message = "\nRR: " + str.tostring(calculated_RR)
+long_message = "LONG\nTP: " + str.tostring(ma) + "\nSL: " + str.tostring(low_loss) + rr_message
+short_message = "SHORT\nTP: " + str.tostring(ma) + "\nSL: " + str.tostring(high_loss) + rr_message
+if condition_long
+    alert(long_message, freq="once_per_bar_close")
+    label.new(bar_index, low, text=long_message, style=label.style_label_up, color=color.green, textcolor=color.white, force_overlay=true)
+if condition_short
+    alert(short_message, freq="once_per_bar_close")
+    label.new(bar_index, high, text=short_message, style=label.style_label_down, color=color.red, textcolor=color.white, force_overlay=true)
+
+
+
+// --- Оповещение для роботизированной торговли ---
+var bool active_long = false, var bool active_short = false, var float take_long = 0, var float loss_long = 0, var float take_short = 0, var float loss_short = 0
+bool open_long = false
+bool open_short = false
+bool close_half_long = false
+bool close_half_short = false
+bool close_final_long = false
+bool close_final_short = false
+
+if condition_long
+    open_long := true
+    active_long := true
+    take_long := ma
+    loss_long := low_loss - delta
+
+    active_short := false
+    close_final_short := true
+
+if condition_short
+    open_short := true
+    active_short := true
+    take_short := ma
+    loss_short := high_loss + delta
+
+    active_long := false
+    close_final_long := true
+
+if (active_long and close > take_long) and false  // Не работает - выключено
+    close_half_long := true
+    active_long := true
+    take_long := 100000000
+    //loss_long := 0
+
+if (active_long and close < loss_long)
+    close_final_long := true
+    active_long := false
+    take_long := 0
+    loss_long := 0
+
+if (active_short and close < take_short) and false  // Не работает - выключено
+    close_half_short := true
+    active_short := true
+    take_short := 0
+    //loss_short := 0
+
+if (active_short and close > loss_short)
+    close_final_short := true
+    active_short := false
+    take_short := 0
+    loss_short := 0
+
+if active_short and condition_stupid_long
+    close_final_short := true
+    active_short := false
+
+if active_long and condition_stupid_short
+    close_final_long := true
+    active_long := false
+
+
+// --- Визуализация для роботизированной торговли ---
+bgcolor(open_long ? color.new(color.green, 80) : na, title="Места потенциального LONG")
+bgcolor(open_short ?  color.new(color.red, 80) : na, title="Места потенциального SHORT")
+bgcolor(close_half_long or close_half_short ?  color.new(color.yellow, 80) : na, title="Места потенциального закрытия позиции")
+
+
+// --- Торговля роботизированная по стратегии ---
+if close_final_long
+    strategy.close("LONG")
+if close_final_short
+    strategy.close("SHORT")
+if open_long
+    strategy.entry("LONG", strategy.long)
+if open_short
+    strategy.entry("SHORT", strategy.short)
+if close_half_long and false  // Не работает - выключено
+    strategy.close("LONG", qty_percent=50)
+if close_half_short and false  // Не работает - выключено
+    strategy.close("SHORT", qty_percent=50)
+
+
+// --- Оповещения для роботизированной торговли ---
+alertcondition(open_long, title="open LONG")
+alertcondition(open_short, title="open SHORT")
+//alertcondition(close_long, title="close LONG")
+//alertcondition(close_short, title="close SHORT")
+
+
+
+// --- Дебагинг ---
+//label.new(bar_index, high, text=str.tostring(strategy.opentrades), style=label.style_label_down, color=color.black, textcolor=color.white)
